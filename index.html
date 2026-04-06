@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentee Details Form – ADYPSOE</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --accent: #1a3c6e;
+    --accent2: #2e6db4;
+    --accent-light: #ddeaf8;
+    --text: #1c2b3a;
+    --muted: #6b7f94;
+    --border: #ccd8e8;
+    --error: #d9534f;
+    --success: #2d8a5e;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* Header Banner */
+  .header-banner {
+    background: linear-gradient(135deg, #0f2748 0%, #1a3c6e 60%, #2e6db4 100%);
+    color: white;
+    padding: 28px 24px 24px;
+    text-align: center;
+    border-bottom: 4px solid #f0a500;
+  }
+  .header-banner .inst-tag {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #f0c060;
+    margin-bottom: 6px;
+  }
+  .header-banner h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(18px, 4vw, 26px);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .header-banner .sub {
+    font-size: 12.5px;
+    color: #b8d4f0;
+    margin-bottom: 2px;
+  }
+  .header-banner .iqac {
+    margin-top: 10px;
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 3px 14px;
+    font-size: 11.5px;
+    letter-spacing: 1px;
+    color: #ddeaf8;
+  }
+
+  /* Form Title Card */
+  .form-title-card {
+    max-width: 720px;
+    margin: -1px auto 0;
+    background: #1a3c6e;
+    color: white;
+    text-align: center;
+    padding: 14px 24px;
+    border-bottom: 3px solid #f0a500;
+  }
+  .form-title-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+
+  .form-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 12px;
+  }
+
+  /* Section Cards */
+  .section-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-top: 20px;
+    box-shadow: 0 2px 12px rgba(26,60,110,0.07);
+    border-top: 3px solid var(--accent2);
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--accent);
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.5px;
+  }
+
+  /* Grid layouts */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  @media(max-width: 560px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .section-card { padding: 18px 16px; }
+  }
+  .full { grid-column: 1 / -1; }
+
+  /* Field groups */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+  }
+  label span.req { color: var(--error); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 9px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    color: var(--text);
+    background: #f8fafc;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 3px rgba(46,109,180,0.12);
+    background: #fff;
+  }
+  textarea { resize: vertical; min-height: 70px; }
+  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7f94' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+
+  /* Photo upload */
+  .photo-upload-box {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: #f8fafc;
+  }
+  .photo-upload-box:hover { border-color: var(--accent2); background: var(--accent-light); }
+  .photo-upload-box input { display: none; }
+  .photo-upload-box .icon { font-size: 28px; margin-bottom: 6px; }
+  .photo-upload-box p { font-size: 12px; color: var(--muted); }
+  .photo-upload-box .preview { max-width: 90px; max-height: 110px; border-radius: 4px; margin-top: 8px; display: none; }
+  #photoPreview { max-width: 90px; max-height: 110px; border-radius: 4px; margin-top: 8px; display: none; }
+
+  /* Checkboxes */
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .checkbox-item input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--accent2);
+    cursor: pointer;
+  }
+
+  /* Divider inside section */
+  .sub-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 18px 0 10px;
+    padding-left: 6px;
+    border-left: 3px solid var(--accent2);
+  }
+
+  /* Academic table */
+  .acad-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .acad-table th {
+    background: var(--accent);
+    color: white;
+    padding: 9px 10px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+  .acad-table td {
+    padding: 4px 6px;
+    border: 1px solid var(--border);
+  }
+  .acad-table tr:nth-child(even) td { background: #f5f8fc; }
+  .acad-table input[type="text"],
+  .acad-table input[type="number"] {
+    padding: 7px 8px;
+    font-size: 13px;
+    border: none;
+    background: transparent;
+    text-align: center;
+  }
+  .acad-table input[type="text"]:focus,
+  .acad-table input[type="number"]:focus {
+    background: var(--accent-light);
+    border-radius: 4px;
+    box-shadow: none;
+    border: 1px solid var(--accent2);
+  }
+  .acad-table .year-label {
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    padding: 8px;
+  }
+
+  /* Submit Button */
+  .submit-wrap {
+    text-align: center;
+    margin-top: 28px;
+  }
+  .btn-submit {
+    background: linear-gradient(135deg, #1a3c6e, #2e6db4);
+    color: white;
+    border: none;
+    padding: 13px 52px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 16px rgba(26,60,110,0.25);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,60,110,0.3); }
+  .btn-submit:active { transform: translateY(0); }
+
+  /* Success message */
+  .success-msg {
+    display: none;
+    max-width: 720px;
+    margin: 24px auto;
+    background: #e8f7f0;
+    border: 1.5px solid #2d8a5e;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    text-align: center;
+    color: #1e6644;
+  }
+  .success-msg .tick { font-size: 36px; margin-bottom: 8px; }
+  .success-msg h3 { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 6px; }
+
+  /* Note */
+  .note {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="header-banner">
+  <div class="inst-tag">Ajeenkya DY Patil School of Engineering</div>
+  <h1>Department of Mechanical Engineering</h1>
+  <div class="sub">Dr. D. Y. Patil Knowledge City, Charholi (Bk), Lohegaon, Pune – 412 105</div>
+  <div class="iqac">IQAC / 15</div>
+</div>
+
+<div class="form-wrap">
+  <div class="form-title-card">
+    <h2>MENTEE DETAILS FORM</h2>
+  </div>
+
+  <form id="menteeForm" onsubmit="handleSubmit(event)" novalidate>
+
+    <!-- ── BASIC STUDENT INFO ── -->
+    <div class="section-card">
+      <div class="section-title">📋 Basic Information</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Year of Admission <span class="req">*</span></label>
+          <input type="text" name="year_admission" placeholder="e.g. 2024" required>
+        </div>
+        <div class="field">
+          <!-- Photo Upload -->
+          <label>Passport Size Photo</label>
+          <div class="photo-upload-box" onclick="document.getElementById('photoInput').click()">
+            <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)">
+            <div class="icon">📷</div>
+            <p>Click to upload photo</p>
+            <img id="photoPreview" alt="Preview">
+          </div>
+        </div>
+        <div class="field">
+          <label>PRN <span class="req">*</span></label>
+          <input type="text" name="prn" placeholder="Permanent Registration Number" required>
+        </div>
+        <div class="field">
+          <label>Eligibility No.</label>
+          <input type="text" name="eligibility_no" placeholder="Eligibility Number">
+        </div>
+        <div class="field full">
+          <label>Student Full Name <span class="req">*</span></label>
+          <input type="text" name="student_name" placeholder="As per official records" required>
+        </div>
+        <div class="field">
+          <label>Contact Number <span class="req">*</span></label>
+          <input type="tel" name="contact" placeholder="10-digit mobile number" maxlength="10" required>
+        </div>
+        <div class="field">
+          <label>Date of Birth <span class="req">*</span></label>
+          <input type="date" name="dob" required>
+        </div>
+        <div class="field">
+          <label>Blood Group</label>
+          <select name="blood_group">
+            <option value="">Select</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option>
+            <option>O+</option><option>O-</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Email ID <span class="req">*</span></label>
+          <input type="email" name="email" placeholder="student@example.com" required>
+        </div>
+        <div class="field">
+          <label>Caste</label>
+          <select name="caste">
+            <option value="">Select</option>
+            <option>General</option><option>OBC</option>
+            <option>SC</option><option>ST</option><option>NT</option><option>SBC</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Scholarship / EBC</label>
+          <select name="scholarship_ebc">
+            <option value="">Select</option>
+            <option>Applicable</option><option>NA</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Any Other Scholarship Availed</label>
+          <input type="text" name="other_scholarship" placeholder="Scholarship name / NA">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MOTHER'S DETAILS ── -->
+    <div class="section-card">
+      <div class="section-title">👩 Mother's Details</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Mother's Name <span class="req">*</span></label>
+          <input type="text" name="mother_name" required>
+        </div>
+        <div class="field">
+          <label>Occupation</label>
+          <input type="text" name="mother_occupation">
+        </div>
+        <div class="field">
+          <label>Designation</label>
+          <input type="text" name="mother_designation">
+        </div>
+        <div class="field">
+          <label>Contact Number</label>
+          <input type="tel" name="mother_contact" maxlength="10">
+        </div>
+        <div class="field full">
+          <label>Company / Organization Name</label>
+          <input type="text" name="mother_company">
+        </div>
+        <div class="field full">
+          <label>Email ID</label>
+          <input type="email" name="mother_email">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FATHER'S DETAILS ── -->
+    <div class="section-card">
+      <div class="section-title">👨 Father's Details</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Father's Name <span class="req">*</span></label>
+          <input type="text" name="father_name" required>
+        </div>
+        <div class="field">
+          <label>Occupation</label>
+          <input type="text" name="father_occupation">
+        </div>
+        <div class="field">
+          <label>Designation</label>
+          <input type="text" name="father_designation">
+        </div>
+        <div class="field">
+          <label>Contact Number</label>
+          <input type="tel" name="father_contact" maxlength="10">
+        </div>
+        <div class="field full">
+          <label>Company / Organization Name</label>
+          <input type="text" name="father_company">
+        </div>
+        <div class="field full">
+          <label>Email ID</label>
+          <input type="email" name="father_email">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADDRESS & GUARDIAN ── -->
+    <div class="section-card">
+      <div class="section-title">🏠 Address & Local Guardian</div>
+      <div class="grid-2">
+        <div class="field full">
+          <label>Residential / Permanent Address <span class="req">*</span></label>
+          <textarea name="address" placeholder="House No., Street, Area, City, PIN" rows="3" required></textarea>
+        </div>
+        <div class="field">
+          <label>Name of Local Guardian</label>
+          <input type="text" name="guardian_name">
+        </div>
+        <div class="field">
+          <label>Contact No. of Local Guardian</label>
+          <input type="tel" name="guardian_contact" maxlength="10">
+        </div>
+        <div class="field full">
+          <label>Address of Local Guardian</label>
+          <textarea name="guardian_address" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PERSONAL PROFILE ── -->
+    <div class="section-card">
+      <div class="section-title">🧠 Personal Profile</div>
+      <div class="grid-2">
+        <div class="field full">
+          <label>Hobbies</label>
+          <input type="text" name="hobbies" placeholder="e.g. Reading, Cricket, Coding">
+        </div>
+        <div class="field full">
+          <label>Strengths</label>
+          <input type="text" name="strength" placeholder="e.g. Problem solving, Leadership">
+        </div>
+        <div class="field full">
+          <label>Weaknesses</label>
+          <input type="text" name="weakness" placeholder="e.g. Public speaking">
+        </div>
+        <div class="field">
+          <label>Bike / Car Name</label>
+          <input type="text" name="vehicle_name" placeholder="Vehicle name">
+        </div>
+        <div class="field">
+          <label>Vehicle Number</label>
+          <input type="text" name="vehicle_number" placeholder="e.g. MH12AB1234">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ACADEMIC RESULTS ── -->
+    <div class="section-card">
+      <div class="section-title">📊 Academic Results</div>
+      <p class="note" style="margin-bottom:12px;">Fill in SGPA for completed semesters only. Leave blank if not applicable.</p>
+      <div style="overflow-x:auto;">
+        <table class="acad-table">
+          <thead>
+            <tr>
+              <th>Exam Year</th>
+              <th>SGPA – Sem I</th>
+              <th>SGPA – Sem II</th>
+              <th>Year of Passing</th>
+              <th>CGPA</th>
+              <th>ATKT Subjects (if any)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="year-label">FE</td>
+              <td><input type="number" name="fe_sgpa1" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="number" name="fe_sgpa2" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="text" name="fe_year" placeholder="e.g. 2023"></td>
+              <td><input type="number" name="fe_cgpa" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="text" name="fe_atkt" placeholder="Subject names"></td>
+            </tr>
+            <tr>
+              <td class="year-label">SE</td>
+              <td><input type="number" name="se_sgpa1" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="number" name="se_sgpa2" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="text" name="se_year" placeholder="e.g. 2024"></td>
+              <td><input type="number" name="se_cgpa" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="text" name="se_atkt" placeholder="Subject names"></td>
+            </tr>
+            <tr>
+              <td class="year-label">TE</td>
+              <td><input type="number" name="te_sgpa1" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="number" name="te_sgpa2" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="text" name="te_year" placeholder="e.g. 2025"></td>
+              <td><input type="number" name="te_cgpa" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="text" name="te_atkt" placeholder="Subject names"></td>
+            </tr>
+            <tr>
+              <td class="year-label">BE</td>
+              <td><input type="number" name="be_sgpa1" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="number" name="be_sgpa2" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="text" name="be_year" placeholder="e.g. 2026"></td>
+              <td><input type="number" name="be_cgpa" placeholder="–" step="0.01" min="0" max="10"></td>
+              <td><input type="text" name="be_atkt" placeholder="Subject names"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── ACTIVITIES ── -->
+    <div class="section-card">
+      <div class="section-title">🏆 Activities</div>
+      <div class="field" style="margin-bottom:16px;">
+        <label>Extra-Curricular Activities</label>
+        <textarea name="extra_curricular" rows="3" placeholder="Sports, cultural events, NCC, NSS, etc."></textarea>
+      </div>
+      <div class="field">
+        <label>Co-Curricular Activities</label>
+        <textarea name="co_curricular" rows="3" placeholder="Workshops, seminars, paper presentations, certifications, etc."></textarea>
+      </div>
+    </div>
+
+    <!-- ── DECLARATION ── -->
+    <div class="section-card" style="background:#f5f8fc; border-top-color: #2d8a5e;">
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <input type="checkbox" id="declare" name="declaration" style="margin-top:3px; accent-color:#1a3c6e; width:16px; height:16px; flex-shrink:0;" required>
+        <label for="declare" style="font-size:13px; color:var(--text); cursor:pointer; line-height:1.5;">
+          I hereby declare that the information provided above is <strong>true and correct</strong> to the best of my knowledge. I understand that any false information may lead to disciplinary action.
+        </label>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="submit" class="btn-submit">Submit Mentee Details →</button>
+    </div>
+  </form>
+
+  <!-- Success Message -->
+  <div class="success-msg" id="successMsg">
+    <div class="tick">✅</div>
+    <h3>Form Submitted Successfully!</h3>
+    <p>Your mentee details have been recorded. Your mentor will be in touch shortly.</p>
+    <p style="margin-top:10px; font-size:12px; color:#4a7a60;">Ajeenkya DY Patil School of Engineering – Department of Mechanical Engineering</p>
+  </div>
+
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyMTsPUgqCXAIi_XFNHvuDDk49dO7upPEE9u_H5I-WCeosLon2bWsTFoH9bznaS5B7g/exec";
+
+  function previewPhoto(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.getElementById('photoPreview');
+      img.src = e.target.result;
+      img.style.display = 'block';
+      document.querySelector('.photo-upload-box .icon').style.display = 'none';
+      document.querySelector('.photo-upload-box p').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('menteeForm');
+
+    // Validate required fields
+    const required = form.querySelectorAll('[required]');
+    let valid = true;
+    required.forEach(field => {
+      field.style.borderColor = '';
+      if (field.type === 'checkbox') {
+        if (!field.checked) { field.parentElement.style.outline = '2px solid #d9534f'; valid = false; }
+        else { field.parentElement.style.outline = ''; }
+      } else {
+        if (!field.value.trim()) { field.style.borderColor = '#d9534f'; valid = false; }
+      }
+    });
+
+    if (!valid) {
+      alert('Please fill in all required fields marked with *');
+      return;
+    }
+
+    // Show loading state
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    // Collect all form data
+    const data = {};
+    const inputs = form.querySelectorAll('input[name], select[name], textarea[name]');
+    inputs.forEach(input => {
+      if (input.type === 'checkbox') {
+        data[input.name] = input.checked ? 'Yes' : 'No';
+      } else {
+        data[input.name] = input.value;
+      }
+    });
+
+    // Send to Google Sheets via Apps Script
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      // no-cors means we can't read the response, but if no error thrown it worked
+      form.style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(err => {
+      btn.textContent = 'Submit Mentee Details →';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      alert('Submission failed. Please check your internet connection and try again.\n\nError: ' + err.message);
+    });
+  }
+</script>
+</body>
+</html>
