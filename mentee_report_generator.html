@@ -271,18 +271,20 @@
 <body>
 
 <!-- PASSWORD SCREEN -->
-<div id="passwordScreen">
-  <div class="pwd-box">
-    <div class="pwd-logo">&#128274;</div>
-    <h2>Restricted Access</h2>
-    <p>Mentee Report Generator<br>Enter your password to continue</p>
-    <div class="pwd-input-wrap">
-      <input type="password" id="pwdInput" placeholder="Enter password">
-      <span class="toggle-pwd" id="toggleBtn">Show</span>
-    </div>
-    <div class="pwd-error" id="pwdError">Incorrect password. Please try again.</div>
-    <button class="btn-unlock" id="unlockBtn">Unlock</button>
-    <div class="pwd-attempts" id="attemptsMsg"></div>
+<div id="passwordScreen" style="position:fixed;inset:0;background:linear-gradient(135deg,#0f2748,#1a3c6e,#2e6db4);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:white;border-radius:16px;padding:40px 36px;width:100%;max-width:380px;box-shadow:0 24px 60px rgba(0,0,0,0.35);text-align:center;">
+    <div style="background:linear-gradient(135deg,#1a3c6e,#2e6db4);width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;">&#128274;</div>
+    <h2 style="font-family:Georgia,serif;font-size:20px;color:#1a3c6e;margin-bottom:4px;">Restricted Access</h2>
+    <p style="font-size:12.5px;color:#6b7f94;margin-bottom:24px;">Mentee Report Generator<br>Enter your password to continue</p>
+    <input type="password" id="pwdInput" placeholder="Enter password"
+      style="width:100%;padding:12px 16px;border:2px solid #ccd8e8;border-radius:9px;font-size:15px;margin-bottom:10px;outline:none;display:block;box-sizing:border-box;"
+      onkeypress="if(event.keyCode==13){checkPassword();}">
+    <p id="pwdError" style="font-size:12px;color:#d9534f;margin-bottom:10px;display:none;">Incorrect password. Please try again.</p>
+    <p id="attemptsMsg" style="font-size:12px;color:#6b7f94;margin-bottom:10px;"></p>
+    <button
+      style="width:100%;padding:13px;background:linear-gradient(135deg,#1a3c6e,#2e6db4);color:white;border:none;border-radius:9px;font-size:15px;font-weight:600;cursor:pointer;"
+      onmousedown="checkPassword();">Unlock</button>
+    <p style="margin-top:12px;font-size:11px;color:#aaa;">Press Enter or click Unlock</p>
   </div>
 </div>
 
@@ -900,84 +902,23 @@ function generatePDF(index) {
   // ── PASSWORD PROTECTION ──
   var CORRECT_PASSWORD = 'ADYPSOE@2025';
   var attempts = 0;
-  var MAX_ATTEMPTS = 5;
-  var lockoutTime = null;
-  var pwdVisible = false;
 
   function checkPassword() {
-    var now = Date.now();
-    if (lockoutTime && now < lockoutTime) {
-      var remaining = Math.ceil((lockoutTime - now) / 1000);
-      document.getElementById('pwdError').textContent = 'Too many attempts. Wait ' + remaining + 's.';
-      document.getElementById('pwdError').style.display = 'block';
-      return;
-    }
-
-    var input = document.getElementById('pwdInput');
-    var err = document.getElementById('pwdError');
-    var attMsg = document.getElementById('attemptsMsg');
-    var entered = input.value;
-
+    var entered = document.getElementById('pwdInput').value;
     if (entered === CORRECT_PASSWORD) {
       document.getElementById('passwordScreen').style.display = 'none';
       document.getElementById('mainContent').style.display = 'block';
-      attempts = 0;
     } else {
       attempts = attempts + 1;
-      input.value = '';
-      err.textContent = 'Incorrect password. Please try again.';
-      err.style.display = 'block';
-      input.style.borderColor = '#d9534f';
-      input.style.background = '#fff5f5';
-      setTimeout(function() {
-        input.style.borderColor = '';
-        input.style.background = '';
-      }, 800);
-
-      var remaining = MAX_ATTEMPTS - attempts;
-      if (remaining > 0) {
-        attMsg.innerHTML = remaining + ' attempt(s) remaining';
+      document.getElementById('pwdInput').value = '';
+      document.getElementById('pwdError').style.display = 'block';
+      if (attempts >= 5) {
+        document.getElementById('attemptsMsg').innerHTML = 'Too many attempts. Refresh the page to try again.';
       } else {
-        lockoutTime = Date.now() + 30000;
-        attMsg.innerHTML = 'Locked for 30 seconds';
-        attempts = 0;
-        setTimeout(function() { attMsg.innerHTML = ''; lockoutTime = null; }, 30000);
+        document.getElementById('attemptsMsg').innerHTML = (5 - attempts) + ' attempt(s) remaining';
       }
     }
   }
-
-  function togglePwd() {
-    var input = document.getElementById('pwdInput');
-    var btn = document.getElementById('toggleBtn');
-    if (pwdVisible) {
-      input.type = 'password';
-      btn.textContent = 'Show';
-      pwdVisible = false;
-    } else {
-      input.type = 'text';
-      btn.textContent = 'Hide';
-      pwdVisible = true;
-    }
-  }
-
-  // Attach event listeners after DOM loads
-  document.addEventListener('DOMContentLoaded', function() {
-    var unlockBtn = document.getElementById('unlockBtn');
-    var toggleBtn = document.getElementById('toggleBtn');
-    var pwdInput = document.getElementById('pwdInput');
-
-    if (unlockBtn) {
-      unlockBtn.addEventListener('click', function() { checkPassword(); });
-    }
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', function() { togglePwd(); });
-    }
-    if (pwdInput) {
-      pwdInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { checkPassword(); }
-      });
-    }
-  });
 
 </script>
 </div><!-- end mainContent -->
